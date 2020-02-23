@@ -704,10 +704,24 @@ input, select, textarea {
 				width: 100%;
 			}
 
+		.image.sub {
+			display: block;
+			margin: 2.5rem 0;
+			width: 45%;
+		}
+
+			.image.sub img {
+				width: 45%;
+			}
+
 		@media screen and (max-width: 736px) {
 
 			.image.main {
 				margin: 2rem 0;
+			}
+
+			.image.sub {
+				margin: 1rem 0;
 			}
 
 		}
@@ -716,6 +730,10 @@ input, select, textarea {
 
 			.image.main {
 				margin: 1.5rem 0;
+			}
+
+			.image.sub {
+				margin: 1rem 0;
 			}
 
 		}
