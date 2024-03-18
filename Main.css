@@ -37,6 +37,17 @@ body{
     z-index: 999;
 }
 
+#child{
+    width: 45%;
+    max-width: 290px;
+    background-color: blue;
+    border-radius: 15px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+    float: left;
+}
+
 #image img{
     height: 240px;
     width: 100%;
@@ -44,82 +55,6 @@ body{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
-#player{
-    padding: 40px;
-    color:#333;
-}
-#songTitle{
-    width:300px;
-    text-align: center;
-    font-family: monospace;
-    font-size: 18px;
-    position: absolute;
-    top:60%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-#buttons{
-    height: 50px;
-    width: 100%;
-    margin-top: 50px;
-    position:relative;
-    top:10%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-#play,#next,#pre{
-    width: 50px;
-    height: 50px;
-    border: 0;
-    background-color:royalblue;
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-    position: absolute;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-#next{
-    width: 30px;
-    height: 30px;
-    left: 70%;
-}
-#pre{
-    width: 30px;
-    height: 30px;
-    left: 30%;
-}
-#play img,#next img,#pre img{
-    position: absolute;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-#seek-bar{
-    width: 300px;
-    height: 6px;
-    background-color:gray;
-    display: flex;
-    border-radius: 50px;
-    margin-left: calc(50% - 150px);
-    cursor: pointer;
-}
-#fill{
-    height: 5px;
-    background-color:royalblue;
-    border-radius: 20px;
-}
-#handle{
-    width: 8px;
-    height: 8px;
-    background-color:royalblue;
-    border-radius: 50%;
-    margin-left: -5px;
-    transform: scale(2);
-}
-
-
 
 
 
