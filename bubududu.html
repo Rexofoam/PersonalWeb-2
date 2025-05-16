@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubu & DuDu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ffd6e0; /* Light pink background */
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .question-text {
+            min-height: 60px; /* Maintain consistent height for question text */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .image-container {
+            margin: 30px auto;
+            text-align: center;
+            height: 250px; /* Default height */
+            width: 100%;
+            max-width: 500px; /* Maximum width */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px; /* Rounded corners */
+            position: relative;
+            overflow: hidden; /* Ensures content stays within the boundary */
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Maintains aspect ratio without stretching */
+            transition: all 0.3s ease;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        
+        #yesBtn {
+            transition: all 0.3s ease;
+            z-index: 10; /* Ensure it stays on top when enlarged */
+        }
+        
+        .footer {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 10px 0;
+            text-align: center !important;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+            backdrop-filter: blur(5px);
+        }
+        
+        .result-container {
+            text-align: center;
+            display: none; /* Initially hidden */
+        }
+        
+        .result-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .pass {
+            color: #28a745; /* Green color for pass */
+        }
+        
+        .fail {
+            color: #dc3545; /* Red color for fail */
+        }
+        
+        /* Mobile responsiveness adjustments */
+        @media (max-width: 576px) {
+            .image-container {
+                height: 200px;
+            }
+            
+            .result-text {
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn-container {
+                gap: 10px;
+            }
+            
+            /* Adjust button scaling for small screens */
+            #yesBtn.enlarged {
+                transform-origin: center center;
+                margin: 5px !important;
+            }
+        }
+               
+        #restartButtonPass, #restartButtonFail {
+            transition: all 0.3s ease;
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+
+        #restartButtonPass:hover, #restartButtonFail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="quiz-container">
+            <div class="question-text">
+                <h1 id="questionText" class="text-center">可以跟我和好吗?</h1>
+            </div>
+            
+            <div class="image-container">
+                <img id="mainImage" src="images/1.gif">
+            </div>
+            
+            <div class="btn-container">
+                <button id="yesBtn" class="btn btn-success">和好</button>
+                <button id="noBtn" class="btn btn-danger">不要</button>
+            </div>
+        </div>
+        
+        <!-- Pass Result Screen (Hidden by default) -->
+        <div id="pass-result" class="result-container">
+            <div class="image-container">
+                <img src="images/pass.gif">
+            </div>
+            <div class="result-text pass">!!!喜欢你!!(><)♡°°</div>
+            <button id="restartButtonPass" class="btn btn-primary mt-4">Try Again</button>
+        </div>
+        
+        <!-- Fail Result Screen (Hidden by default) -->
+        <div id="fail-result" class="result-container">
+            <div class="image-container">
+                <img src="images/fail1.gif">
+            </div>
+            <div class="result-text fail">.....</div>
+            <button id="restartButtonFail" class="btn btn-primary mt-4">Try Again</button>
+        </div>
+    </div>
+    <footer class="site-footer">
+    <div class="container">
+        <p>© Copyright and owned by Jonathan Foong, all images are by BubuDudu</p>
+    </div>
+</footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const mainImage = document.getElementById('mainImage');
+            const questionText = document.getElementById('questionText');
+            const quizContainer = document.getElementById('quiz-container');
+            const passResult = document.getElementById('pass-result');
+            const failResult = document.getElementById('fail-result');
+            
+            let clickCount = 0;
+            
+            // Replace these URLs with your own image paths
+            const images = [
+                "images/5.gif",
+                "images/4.gif",
+                "images/6.gif",
+                "images/7.gif",
+                "images/8.gif",
+                "images/8.gif"
+            ];
+            
+            // Array of changing question texts
+            const questionTexts = [
+                "可以跟我和好吗?",
+                "欲擒故纵,我懂...",
+                "零花钱都给你...",
+                "能不能给个台阶嘛...",
+                "原谅我嘛,对不起...",
+                "可以跟我和好吗?",
+                "可以跟我和好吗?"
+            ];
+            
+            // Size increments for the Yes button (adjusted for better mobile experience)
+            const sizeFactor = [1.2, 1.4, 1.7, 2.0, 3.0, 4.0];
+            
+            function showPassScreen() {
+                quizContainer.style.display = 'none';
+                passResult.style.display = 'block';
+            }
+            
+            function showFailScreen() {
+                quizContainer.style.display = 'none';
+                failResult.style.display = 'block';
+            }
+            
+            // Preload all images to ensure they're ready when needed
+            function preloadImages() {
+                images.forEach((src) => {
+                    const img = new Image();
+                    img.src = src;
+                });
+                
+                // Also preload result images
+                const successImg = new Image();
+                successImg.src = document.querySelector('#pass-result img').src;
+                
+                const failureImg = new Image();
+                failureImg.src = document.querySelector('#fail-result img').src;
+            }
+            
+            // Preload images when page loads
+            preloadImages();
+            
+            // Check if we're on mobile
+            function isMobile() {
+                return window.innerWidth <= 576;
+            }
+            
+            // When Yes button is clicked
+            yesBtn.addEventListener('click', function() {
+                // Show the pass screen
+                showPassScreen();
+            });
+            
+            // When No button is clicked
+            noBtn.addEventListener('click', function() {
+                if (clickCount < 6) {
+                    // Change image
+                    const nextImageIndex = (clickCount + 1) % images.length;
+                    mainImage.src = images[nextImageIndex];
+                    
+                    // Change the question text
+                    questionText.textContent = questionTexts[clickCount + 1];
+                    
+                    // Increase size of Yes button - with mobile adjustment
+                    const newSize = sizeFactor[clickCount];
+                    yesBtn.style.transform = `scale(${newSize})`;
+                    
+                    // Add class for better mobile handling
+                    yesBtn.classList.add('enlarged');
+                    
+                    // Adjust margin based on device
+                    if (isMobile()) {
+                        yesBtn.style.margin = `${clickCount * 3}px`;
+                    } else {
+                        yesBtn.style.margin = `${clickCount * 5}px`;
+                    }
+                    
+                    clickCount++;
+                    
+                    // If this is the 6th click, show the fail screen
+                    if (clickCount >= 6) {
+                        setTimeout(showFailScreen, 1000); // Short delay for better UX
+                    }
+                }
+            });
+            
+            // Handle window resize to adjust for orientation changes
+            window.addEventListener('resize', function() {
+                if (yesBtn.classList.contains('enlarged') && isMobile()) {
+                    // Re-adjust scaling for mobile if orientation changes
+                    yesBtn.style.margin = `${(clickCount - 1) * 3}px`;
+                }
+            });
+        });
+
+        document.getElementById('restartButtonPass').addEventListener('click', function() {
+            location.reload();
+        });
+
+        document.getElementById('restartButtonFail').addEventListener('click', function() {
+            location.reload();
+        });
+    </script>
+</body>
+</html>
