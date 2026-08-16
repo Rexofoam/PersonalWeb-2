@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <audio id="audioFunc" controls>
+        <source src="your-audio-file.mp3" type="audio/mpeg">
+        Some random transcript for the text
+    </audio>
+
+    <script>
+        const audio = document.getElementById('audioFunc');
+
+        // AWS to give the start and stop time
+        const startTime = 10;
+        const endTime = 30;
+
+        function playAudioClip() {
+            audio.currentTime = startTime;
+            audio.play();
+        }
+
+        // func to know when to stop
+        audio.addEventListener('timeupdate', () => {
+            if (audio.currentTime >= endTime) {
+                audio.pause();
+                audio.currentTime = startTime; // Reset to start time if you want to replay
+            }
+        });
+        // Start playing the clip when the audio is loaded
+        audio.addEventListener('play', playAudioClip);
+    </script>
+</body>
+</html>
